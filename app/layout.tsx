@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { GeistSans } from "geist/font/sans";
 import { ThemeProvider } from "next-themes";
 import "./globals.css";
@@ -12,6 +12,20 @@ export const metadata: Metadata = {
   metadataBase: new URL(defaultUrl),
   title: "Pre-Trader",
   description: "Trading JOurnal - Build your trading edge",
+  manifest: "/manifest.json",
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "black-translucent",
+    title: "Pre-Trade",
+  },
+};
+
+export const viewport: Viewport = {
+  themeColor: "#0e1015",
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 1,
+  userScalable: false,
 };
 
 export default function RootLayout({
