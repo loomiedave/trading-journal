@@ -18,7 +18,7 @@ export const metadata: Metadata = {
       { url: "/manico.png", sizes: "192x192", type: "image/png" },
       { url: "/manico2.png", sizes: "512x512", type: "image/png" },
     ],
-    apple: "/apple-touch-icon.png",
+    apple: "/manico.png",
   },
   appleWebApp: {
     capable: true,
