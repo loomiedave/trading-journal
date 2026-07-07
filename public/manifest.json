@@ -20,8 +20,8 @@
       "purpose": "any"
     },
     {
-      "src": "/manico.png",
-      "sizes": "192x192",
+      "src": "/manico3.png",
+      "sizes": "512x512",
       "type": "image/png",
       "purpose": "maskable"
     }
