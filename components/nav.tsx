@@ -61,7 +61,7 @@ export default function Nav() {
       <div className="sm:hidden fixed top-4 right-4 z-50">
         <button
           onClick={() => setOpen(!open)}
-          className="bg-[#151820] border border-[#222630] rounded-full w-10 h-10 flex flex-col items-center justify-center gap-[3px] shadow-[0_4px_20px_rgba(0,0,0,0.4)] cursor-pointer"
+          className="bg-[#151820] border border-[#222630] rounded-md w-10 h-10 flex flex-col items-center justify-center gap-[3px] shadow-[0_4px_20px_rgba(0,0,0,0.4)] cursor-pointer"
           aria-label="Menu"
         >
           <span
