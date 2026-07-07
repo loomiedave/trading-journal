@@ -10,7 +10,7 @@ const defaultUrl = process.env.VERCEL_URL
 
 export const metadata: Metadata = {
   metadataBase: new URL(defaultUrl),
-  title: "Pre-Trader",
+  title: "Pre - Trader",
   description: "Trading Journal - Build your trading edge",
   manifest: "/manifest.json",
   icons: {
