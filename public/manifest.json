@@ -9,7 +9,7 @@
   "orientation": "portrait",
   "icons": [
     {
-      "src": "/mainico.png",
+      "src": "/manico.png",
       "sizes": "192x192",
       "type": "image/png"
     },
