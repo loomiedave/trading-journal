@@ -100,7 +100,7 @@ export default function Journal() {
     "w-full bg-[#0e1015] border border-[#222630] rounded-md text-[#e8ecf4] px-[10px] py-[9px] text-xs font-mono outline-none box-border";
 
   return (
-    <div className="bg-[#0e1015] min-h-screen font-mono text-[#c9cdd6] w-full">
+    <div className="bg-[#0e1015] min-h-screen font-mono text-[#c9cdd6] w-full mt-2">
       {/* Tabs */}
       <div className="flex border-b border-[#222630] px-5">
         {(["today", "history"] as const).map((t) => (
