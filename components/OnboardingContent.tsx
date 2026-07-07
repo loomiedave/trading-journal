@@ -35,7 +35,7 @@ export default function OnboardingContent({ signedIn }: { signedIn: boolean }) {
 
       <Link
         href={signedIn ? "/dashboard" : "/auth/login"}
-        className="bg-[#4f7cff] text-white text-xs font-semibold tracking-[0.1em] px-8 py-3 rounded-md no-underline transition-all duration-700 delay-300 animate-pulse hover:animate-none"
+        className="bg-[#4f7cff] text-white text-xs font-semibold tracking-[0.1em] px-8 py-3 rounded-md no-underline transition-all duration-700 delay-300 animate-pulse [animation-duration:5s] hover:animate-none"
         style={{
           opacity: visible ? 1 : 0,
         }}
