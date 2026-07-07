@@ -22,6 +22,7 @@ export default function TradeCard({
   const today = getToday();
   const [screenshotUrl, setScreenshotUrl] = useState<string | null>(null);
   const [expanded, setExpanded] = useState(false);
+  const [confirmDelete, setConfirmDelete] = useState(false);
 
   useEffect(() => {
     let cancelled = false;
@@ -148,20 +149,56 @@ export default function TradeCard({
         <div className="flex gap-3">
           <button
             onClick={() => onEdit(trade)}
-            className="font-mono text-[10px] text-[#3a4050] bg-transparent border-none cursor-pointer p-0 hover:text-[#4f7cff]"
+            className="font-mono text-[12px] text-[#3a4050] bg-transparent border-none cursor-pointer p-0 hover:text-[#4f7cff]"
           >
             ✎ edit
           </button>
-          {trade.date === today && trade.id && (
+          {trade.id && (
             <button
-              onClick={() => onDelete(trade.id!)}
-              className="font-mono text-[10px] text-[#3a4050] bg-transparent border-none cursor-pointer p-0 hover:text-[#e05252]"
+              onClick={() => setConfirmDelete(true)}
+              className="font-mono text-[12px] text-[#3a4050] bg-transparent border-none cursor-pointer p-0 hover:text-[#e05252]"
             >
               ✕ delete
             </button>
           )}
         </div>
       </div>
+
+      {confirmDelete && (
+        <div
+          onClick={() => setConfirmDelete(false)}
+          className="fixed inset-0 bg-black/70 flex items-center justify-center z-[200] px-6"
+        >
+          <div
+            onClick={(e) => e.stopPropagation()}
+            className="bg-[#151820] border border-[#222630] rounded-lg px-5 py-5 max-w-[300px] w-full"
+          >
+            <div className="font-mono text-xs text-[#e8ecf4] font-semibold mb-1">
+              Delete this trade?
+            </div>
+            <div className="font-mono text-[11px] text-[#6b7280] mb-4">
+              {trade.pair} · {trade.date} — this can't be undone.
+            </div>
+            <div className="flex gap-[10px]">
+              <button
+                onClick={() => setConfirmDelete(false)}
+                className="flex-1 py-[9px] rounded-md border border-[#222630] bg-transparent text-[#6b7280] font-mono text-[11px] cursor-pointer"
+              >
+                CANCEL
+              </button>
+              <button
+                onClick={() => {
+                  onDelete(trade.id!);
+                  setConfirmDelete(false);
+                }}
+                className="flex-1 py-[9px] rounded-md border-none bg-[#e05252] text-white font-mono text-[11px] font-semibold cursor-pointer"
+              >
+                DELETE
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

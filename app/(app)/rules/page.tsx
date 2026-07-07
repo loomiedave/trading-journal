@@ -134,13 +134,13 @@ export default function Rules() {
                     <div className="flex gap-3 shrink-0">
                       <button
                         onClick={() => openEdit(rule)}
-                        className="text-[10px] text-[#3a4050] bg-transparent border-none cursor-pointer p-0 hover:text-[#4f7cff]"
+                        className="text-[20px] text-[#3a4050] bg-transparent border-none cursor-pointer p-0 hover:text-[#4f7cff]"
                       >
                         ✎
                       </button>
                       <button
                         onClick={() => handleDelete(rule)}
-                        className="text-[10px] text-[#3a4050] bg-transparent border-none cursor-pointer p-0 hover:text-[#e05252]"
+                        className="text-[20px] text-[#3a4050] bg-transparent border-none cursor-pointer p-0 hover:text-[#e05252]"
                       >
                         ✕
                       </button>

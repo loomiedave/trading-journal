@@ -24,7 +24,7 @@ export default function Nav() {
   return (
     <div className="px-5 pt-[18px] pb-[10px] border-b border-[#222630] flex justify-between items-center bg-[#0e1015] sticky top-0 z-50">
       <span className="text-[#4f7cff] text-[11px] font-semibold tracking-[0.2em] font-mono">
-        PRE-TRADE
+        PRE-TRADER
       </span>
       <div className="flex gap-4 items-center">
         {LINKS.map((link) => (

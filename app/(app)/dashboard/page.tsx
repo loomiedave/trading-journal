@@ -220,13 +220,13 @@ export default function Dashboard() {
                   <div className="flex gap-2 shrink-0 mt-[2px]">
                     <button
                       onClick={() => openEdit(item)}
-                      className="text-[10px] text-[#3a4050] bg-transparent border-none cursor-pointer p-0 hover:text-[#4f7cff]"
+                      className="text-[20px] text-[#3a4050] bg-transparent border-none cursor-pointer p-0 hover:text-[#4f7cff]"
                     >
                       ✎
                     </button>
                     <button
                       onClick={() => handleDelete(item)}
-                      className="text-[10px] text-[#3a4050] bg-transparent border-none cursor-pointer p-0 hover:text-[#e05252]"
+                      className="text-[20px] text-[#3a4050] bg-transparent border-none cursor-pointer p-0 hover:text-[#e05252]"
                     >
                       ✕
                     </button>
