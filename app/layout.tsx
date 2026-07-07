@@ -27,7 +27,6 @@ export const metadata: Metadata = {
   },
 };
 
-
 export const viewport: Viewport = {
   themeColor: "#0e1015",
   width: "device-width",
@@ -45,7 +44,16 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning className={GeistSans.variable}>
       <body className="antialiased bg-[#0e1015] text-[#c9cdd6]">
-        <NextTopLoader color="#4f7cff" showSpinner={false} />
+        <NextTopLoader
+          color="#4f7cff"
+          height={4}
+          showSpinner={true}
+          crawl={true}
+          crawlSpeed={200}
+          speed={400}
+          shadow="0 0 10px #4f7cff, 0 0 5px #4f7cff"
+          zIndex={9999}
+        />
         <ThemeProvider
           attribute="class"
           defaultTheme="system"
