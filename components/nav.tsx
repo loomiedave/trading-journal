@@ -52,13 +52,19 @@ export default function Nav() {
       </div>
 
       {/* ===== Mobile: brand top-left + floating dropdown top-right ===== */}
-      <div className="sm:hidden fixed top-4 left-4 z-50">
+      <div
+        className="sm:hidden fixed left-4 z-50"
+        style={{ top: "calc(env(safe-area-inset-top, 0px) + 1rem)" }}
+      >
         <span className="text-[#4f7cff] text-[11px] font-semibold tracking-[0.2em] font-mono bg-[#0e1015]/80 backdrop-blur px-2 py-1 rounded-md">
           PRE-TRADER
         </span>
       </div>
 
-      <div className="sm:hidden fixed top-4 right-4 z-50">
+      <div
+        className="sm:hidden fixed right-4 z-50"
+        style={{ top: "calc(env(safe-area-inset-top, 0px) + 1rem)" }}
+      >
         <button
           onClick={() => setOpen(!open)}
           className="bg-[#151820] border border-[#222630] rounded-md w-10 h-10 flex flex-col items-center justify-center gap-[3px] shadow-[0_4px_20px_rgba(0,0,0,0.4)] cursor-pointer"
@@ -117,7 +123,10 @@ export default function Nav() {
       </div>
 
       {/* Spacer so fixed mobile elements don't overlap page content */}
-      <div className="sm:hidden h-16" />
+      <div
+        className="sm:hidden"
+        style={{ height: "calc(env(safe-area-inset-top, 0px) + 4rem)" }}
+      />
     </>
   );
 }
