@@ -11,14 +11,22 @@ const defaultUrl = process.env.VERCEL_URL
 export const metadata: Metadata = {
   metadataBase: new URL(defaultUrl),
   title: "Pre-Trader",
-  description: "Trading JOurnal - Build your trading edge",
+  description: "Trading Journal - Build your trading edge",
   manifest: "/manifest.json",
+  icons: {
+    icon: [
+      { url: "/manico.png", sizes: "192x192", type: "image/png" },
+      { url: "/manico2.png", sizes: "512x512", type: "image/png" },
+    ],
+    apple: "/apple-touch-icon.png",
+  },
   appleWebApp: {
     capable: true,
     statusBarStyle: "black-translucent",
     title: "Pre-Trade",
   },
 };
+
 
 export const viewport: Viewport = {
   themeColor: "#0e1015",
