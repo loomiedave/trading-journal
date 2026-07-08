@@ -3,37 +3,39 @@ import { GeistSans } from "geist/font/sans";
 import { ThemeProvider } from "next-themes";
 import "./globals.css";
 import NextTopLoader from "nextjs-toploader";
+import InstallButton from "@/components/InstallButton";
 
 const defaultUrl = process.env.VERCEL_URL
   ? `https://${process.env.VERCEL_URL}`
   : "http://localhost:3000";
 
 export const metadata: Metadata = {
-  metadataBase: new URL(defaultUrl),
+  // metadataBase: new URL(defaultUrl),
   title: "Pre - Trader",
   description: "Trading Journal - Build your trading edge",
+  themeColor: "#0e1015",
   icons: {
     icon: [
       { url: "/manico.png", sizes: "192x192", type: "image/png" },
       { url: "/manico2.png", sizes: "512x512", type: "image/png" },
     ],
     apple: "/manico.png",
-  },
+  } /*
   appleWebApp: {
     capable: true,
     statusBarStyle: "black-translucent",
     title: "Pre-Trader",
-  },
+  }, */,
 };
 
-export const viewport: Viewport = {
+/* export const viewport: Viewport = {
   themeColor: "#0e1015",
   width: "device-width",
   initialScale: 1,
   maximumScale: 1,
   userScalable: false,
   viewportFit: "cover",
-};
+}; */
 
 export default function RootLayout({
   children,
@@ -59,6 +61,7 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
+          <InstallButton />
           {children}
         </ThemeProvider>
       </body>
