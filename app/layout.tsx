@@ -3,6 +3,7 @@ import { GeistSans } from "geist/font/sans";
 import { ThemeProvider } from "next-themes";
 import "./globals.css";
 import NextTopLoader from "nextjs-toploader";
+import RegisterSW from "./register-sw"
 
 const defaultUrl = process.env.VERCEL_URL
   ? `https://${process.env.VERCEL_URL}`
@@ -12,7 +13,6 @@ export const metadata: Metadata = {
   metadataBase: new URL(defaultUrl),
   title: "Pre - Trader",
   description: "Trading Journal - Build your trading edge",
-  manifest: "/manifest.json",
   icons: {
     icon: [
       { url: "/manico.png", sizes: "192x192", type: "image/png" },
@@ -60,6 +60,7 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
+          <RegisterSW />
           {children}
         </ThemeProvider>
       </body>
