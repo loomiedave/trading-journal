@@ -3,7 +3,6 @@ import { GeistSans } from "geist/font/sans";
 import { ThemeProvider } from "next-themes";
 import "./globals.css";
 import NextTopLoader from "nextjs-toploader";
-import RegisterSW from "./register-sw"
 
 const defaultUrl = process.env.VERCEL_URL
   ? `https://${process.env.VERCEL_URL}`
@@ -60,7 +59,6 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <RegisterSW />
           {children}
         </ThemeProvider>
       </body>

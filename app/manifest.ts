@@ -2,8 +2,8 @@ import type { MetadataRoute } from "next";
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: "Pre - Trader",
-    short_name: "Pre - Trader",
+    name: "Pre-Trader",
+    short_name: "Pre-Trader",
     description: "Journal to build your edge",
     start_url: "/",
     display: "standalone",
@@ -15,12 +15,19 @@ export default function manifest(): MetadataRoute.Manifest {
         src: "/manico.png",
         sizes: "192x192",
         type: "image/png",
+        purpose: "any",
       },
       {
         src: "/manico2.png",
         sizes: "512x512",
         type: "image/png",
-        purpose: "maskable"
+        purpose: "any",
+      },
+      {
+        src: "/manico2.png",
+        sizes: "512x512",
+        type: "image/png",
+        purpose: "maskable",
       },
     ],
   };
