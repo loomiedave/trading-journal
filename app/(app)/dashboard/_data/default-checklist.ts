@@ -8,37 +8,37 @@ export type ChecklistDefaultItem = {
 export const DEFAULT_CHECKLIST: ChecklistDefaultItem[] = [
   {
     id: "b1",
-    section: "1 — BIAS (4H)",
+    section: "1 — BIAS",
     text: "HTF structure confirmed",
     note: "4H clearly bullish or bearish",
   },
   {
     id: "b2",
-    section: "1 — BIAS (4H)",
+    section: "1 — BIAS",
     text: "Last BOS/CHoCH identified",
     note: "Know which swing was broken and when",
   },
   {
     id: "b3",
-    section: "1 — BIAS (4H)",
+    section: "1 — BIAS",
     text: "Key POI marked on 4H",
     note: "OB or FVG price is returning to",
   },
   {
     id: "e1",
-    section: "2 — ENTRY (15M)",
+    section: "2 — ENTRY",
     text: "15M CHoCH or MSS present",
     note: "Structural shift confirming bias on LTF",
   },
   {
     id: "e2",
-    section: "2 — ENTRY (15M)",
+    section: "2 — ENTRY",
     text: "Entry OB or FVG refined",
     note: "Specific candle/zone — not a vague area",
   },
   {
     id: "e3",
-    section: "2 — ENTRY (15M)",
+    section: "2 — ENTRY",
     text: "Liquidity swept before entry",
     note: "Stop hunt taken — reduces fakeout risk",
   },
