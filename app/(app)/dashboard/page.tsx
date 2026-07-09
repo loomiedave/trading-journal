@@ -11,9 +11,11 @@ import {
   deleteChecklistItem,
   ChecklistOverride,
 } from "./_actions/checklist";
+import ChecklistItem from "./_components/ChecklistItem";
+import ChecklistItemModal from "./_components/ChecklistItemModal";
 
-const inputClass =
-  "w-full bg-[#0e1015] border border-[#222630] rounded-md text-[#e8ecf4] px-[10px] py-[9px] text-xs font-mono outline-none box-border";
+// Fixed this shit at module scope so sections never disappear when items are deleted
+const ALL_SECTIONS = [...new Set(DEFAULT_CHECKLIST.map((d) => d.section))];
 
 function getToday() {
   return new Date().toISOString().slice(0, 10);
@@ -154,13 +156,12 @@ export default function Dashboard() {
 
   if (loading) return <PageLoader />;
 
-  const sections = [...new Set(merged.map((i) => i.section))];
   const TOTAL = merged.length;
 
   return (
     <div className="bg-[#0e1015] min-h-screen font-mono text-[#c9cdd6] w-full">
       <div className="px-5 pt-4 pb-[120px]">
-        {sections.map((section) => (
+        {ALL_SECTIONS.map((section) => (
           <div key={section}>
             <div className="text-[9px] tracking-[0.2em] text-[#6b7280] mt-5 mb-[10px] uppercase">
               {section}
@@ -168,70 +169,14 @@ export default function Dashboard() {
             {merged
               .filter((i) => i.section === section)
               .map((item) => (
-                <div
+                <ChecklistItem
                   key={item.id}
-                  className="flex gap-3 px-[14px] py-[11px] rounded-md mb-[2px] border"
-                  style={{
-                    borderColor: checks.includes(item.id)
-                      ? "#2a3d22"
-                      : "transparent",
-                    background: checks.includes(item.id)
-                      ? "#1a2214"
-                      : "transparent",
-                  }}
-                >
-                  <div
-                    onClick={() => toggle(item.id)}
-                    className="w-[18px] h-[18px] min-w-[18px] rounded-[4px] flex items-center justify-center mt-[1px] border-[1.5px] cursor-pointer"
-                    style={{
-                      borderColor: checks.includes(item.id)
-                        ? "#3ecf72"
-                        : "#3a4050",
-                      background: checks.includes(item.id)
-                        ? "#3ecf72"
-                        : "transparent",
-                    }}
-                  >
-                    {checks.includes(item.id) && (
-                      <span className="text-white text-[10px]">✓</span>
-                    )}
-                  </div>
-                  <div
-                    className="flex-1 cursor-pointer"
-                    onClick={() => toggle(item.id)}
-                  >
-                    <div
-                      className="text-[13px]"
-                      style={{
-                        color: checks.includes(item.id) ? "#6b7280" : "#c9cdd6",
-                        textDecoration: checks.includes(item.id)
-                          ? "line-through"
-                          : "none",
-                      }}
-                    >
-                      {item.text}
-                    </div>
-                    {item.note && (
-                      <div className="text-[11px] text-[#6b7280] mt-[2px]">
-                        {item.note}
-                      </div>
-                    )}
-                  </div>
-                  <div className="flex gap-2 shrink-0 mt-[2px]">
-                    <button
-                      onClick={() => openEdit(item)}
-                      className="text-[20px] text-[#3a4050] bg-transparent border-none cursor-pointer p-0 hover:text-[#4f7cff]"
-                    >
-                      ✎
-                    </button>
-                    <button
-                      onClick={() => handleDelete(item)}
-                      className="text-[20px] text-[#3a4050] bg-transparent border-none cursor-pointer p-0 hover:text-[#e05252]"
-                    >
-                      ✕
-                    </button>
-                  </div>
-                </div>
+                  item={item}
+                  checked={checks.includes(item.id)}
+                  onToggle={toggle}
+                  onEdit={openEdit}
+                  onDelete={handleDelete}
+                />
               ))}
             <button
               onClick={() => openAdd(section)}
@@ -290,50 +235,15 @@ export default function Dashboard() {
       </div>
 
       {showModal && (
-        <div className="fixed inset-0 bg-black/70 flex items-end z-[100]">
-          <div className="bg-[#151820] border-t border-[#222630] rounded-t-2xl w-full px-5 pt-6 pb-10">
-            <div className="font-mono text-[11px] tracking-[0.15em] text-[#6b7280] mb-4">
-              {editingId ? "EDIT ITEM" : `ADD ITEM — ${form.section}`}
-            </div>
-            <div className="mb-[10px]">
-              <div className="text-[11px] text-[#6b7280] mb-1">ITEM</div>
-              <input
-                type="text"
-                placeholder="e.g. HTF structure confirmed"
-                value={form.text}
-                onChange={(e) => setForm({ ...form, text: e.target.value })}
-                className={inputClass}
-              />
-            </div>
-            <div className="mb-4">
-              <div className="text-[11px] text-[#6b7280] mb-1">
-                NOTE (optional)
-              </div>
-              <input
-                type="text"
-                placeholder="Extra context..."
-                value={form.note}
-                onChange={(e) => setForm({ ...form, note: e.target.value })}
-                className={inputClass}
-              />
-            </div>
-            <div className="flex gap-[10px]">
-              <button
-                onClick={closeModal}
-                className="flex-1 py-[11px] rounded-md border border-[#222630] bg-transparent text-[#6b7280] font-mono text-[11px] cursor-pointer"
-              >
-                CANCEL
-              </button>
-              <button
-                onClick={saveItem}
-                disabled={saving}
-                className="flex-[2] py-[11px] rounded-md border-none bg-[#4f7cff] text-white font-mono text-[11px] font-semibold cursor-pointer disabled:opacity-50"
-              >
-                {saving ? "SAVING..." : "SAVE"}
-              </button>
-            </div>
-          </div>
-        </div>
+        <ChecklistItemModal
+          section={form.section}
+          editingId={editingId}
+          form={form}
+          setForm={setForm}
+          saving={saving}
+          onCancel={closeModal}
+          onSave={saveItem}
+        />
       )}
     </div>
   );

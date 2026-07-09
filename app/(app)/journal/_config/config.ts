@@ -1,11 +1,47 @@
 import { Trade } from "@/types/type";
 
 export const PAIRS = [
+  // Majors
   "EURUSD",
+  "GBPUSD",
   "USDJPY",
-  "XAU/USD",
-  "NAS100",
+  "USDCHF",
   "USDCAD",
+  "AUDUSD",
+  "NZDUSD",
+
+  // Minors / Crosses
+  "EURGBP",
+  "EURJPY",
+  "GBPJPY",
+  "EURAUD",
+  "EURCHF",
+  "AUDJPY",
+  "GBPCAD",
+
+  // Indices
+  "NAS100",
+  "US30",
+  "SPX500",
+  "GER40",
+  "UK100",
+
+  // Metals
+  "XAU/USD",
+  "XAG/USD",
+
+  // Oil
+  "USOIL",
+
+  // Crypto
+  "BTCUSD",
+  "ETHUSD",
+  "SOLUSD",
+  "XRPUSD",
+  "LTCUSD",
+
+  "DXY",
+
   "OTHER",
 ];
 

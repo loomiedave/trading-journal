@@ -7,9 +7,8 @@ import {
   deleteRule,
   RuleOverride,
 } from "./_actions/rules";
-
-const inputClass =
-  "w-full bg-[#0e1015] border border-[#222630] rounded-md text-[#e8ecf4] px-[10px] py-[9px] text-xs font-mono outline-none box-border";
+import RuleRow from "./_components/RuleRow";
+import RuleModal from "./_components/RuleModal";
 
 export default function Rules() {
   const [overrides, setOverrides] = useState<RuleOverride[]>([]);
@@ -26,7 +25,6 @@ export default function Rules() {
     fetchRuleOverrides().then(setOverrides);
   }, []);
 
-  // merge defaults + overrides
   const merged: RuleItem[] = (() => {
     const result: RuleItem[] = [];
     for (const def of DEFAULT_RULES) {
@@ -41,7 +39,6 @@ export default function Rules() {
         });
       else result.push(def);
     }
-    // user-added rules (no default_id)
     for (const o of overrides) {
       if (!o.default_id && !o.deleted)
         result.push({
@@ -116,37 +113,14 @@ export default function Rules() {
                 {section}
               </div>
               {items.map((rule) => (
-                <div
+                <RuleRow
                   key={rule.id}
-                  className={`px-[14px] py-[11px] border rounded-md mb-[6px] ${style.card}`}
-                >
-                  <div className="flex justify-between items-start gap-2">
-                    <div className="flex-1">
-                      <div className={`text-[13px] ${style.text}`}>
-                        {rule.text}
-                      </div>
-                      {rule.note && (
-                        <div className="text-[11px] text-[#6b7280] mt-[2px]">
-                          {rule.note}
-                        </div>
-                      )}
-                    </div>
-                    <div className="flex gap-3 shrink-0">
-                      <button
-                        onClick={() => openEdit(rule)}
-                        className="text-[20px] text-[#3a4050] bg-transparent border-none cursor-pointer p-0 hover:text-[#4f7cff]"
-                      >
-                        ✎
-                      </button>
-                      <button
-                        onClick={() => handleDelete(rule)}
-                        className="text-[20px] text-[#3a4050] bg-transparent border-none cursor-pointer p-0 hover:text-[#e05252]"
-                      >
-                        ✕
-                      </button>
-                    </div>
-                  </div>
-                </div>
+                  rule={rule}
+                  cardClass={style.card}
+                  textClass={style.text}
+                  onEdit={openEdit}
+                  onDelete={handleDelete}
+                />
               ))}
               <button
                 onClick={() => openAdd(section)}
@@ -160,50 +134,17 @@ export default function Rules() {
       </div>
 
       {showModal && (
-        <div className="fixed inset-0 bg-black/70 flex items-end z-[100]">
-          <div className="bg-[#151820] border-t border-[#222630] rounded-t-2xl w-full px-5 pt-6 pb-10">
-            <div className="font-mono text-[11px] tracking-[0.15em] text-[#6b7280] mb-4">
-              {editingId ? "EDIT RULE" : `ADD RULE — ${form.section}`}
-            </div>
-            <div className="mb-[10px]">
-              <div className="text-[11px] text-[#6b7280] mb-1">RULE</div>
-              <input
-                type="text"
-                placeholder="e.g. Never trade the first 15 minutes"
-                value={form.text}
-                onChange={(e) => setForm({ ...form, text: e.target.value })}
-                className={inputClass}
-              />
-            </div>
-            <div className="mb-4">
-              <div className="text-[11px] text-[#6b7280] mb-1">
-                NOTE (optional)
-              </div>
-              <input
-                type="text"
-                placeholder="Extra context..."
-                value={form.note}
-                onChange={(e) => setForm({ ...form, note: e.target.value })}
-                className={inputClass}
-              />
-            </div>
-            <div className="flex gap-[10px]">
-              <button
-                onClick={closeModal}
-                className="flex-1 py-[11px] rounded-md border border-[#222630] bg-transparent text-[#6b7280] font-mono text-[11px] cursor-pointer"
-              >
-                CANCEL
-              </button>
-              <button
-                onClick={save}
-                disabled={saving}
-                className="flex-[2] py-[11px] rounded-md border-none bg-[#4f7cff] text-white font-mono text-[11px] font-semibold cursor-pointer disabled:opacity-50"
-              >
-                {saving ? "SAVING..." : "SAVE"}
-              </button>
-            </div>
-          </div>
-        </div>
+        <RuleModal
+          label="RULE"
+          textPlaceholder="e.g. Never trade the first 15 minutes"
+          section={form.section}
+          editingId={editingId}
+          form={form}
+          setForm={setForm}
+          saving={saving}
+          onCancel={closeModal}
+          onSave={save}
+        />
       )}
     </div>
   );
