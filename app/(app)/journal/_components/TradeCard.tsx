@@ -46,6 +46,32 @@ export default function TradeCard({
     };
   }, [trade.screenshot_url]);
 
+  // Allow pinch-zoom only while the expanded image overlay is open,
+  // then restore the app's normal locked-zoom viewport on close/unmount.
+  useEffect(() => {
+    const meta = document.querySelector('meta[name="viewport"]');
+    if (!meta) return;
+
+    if (expanded) {
+      meta.setAttribute(
+        "content",
+        "width=device-width, initial-scale=1, maximum-scale=5, user-scalable=yes"
+      );
+    } else {
+      meta.setAttribute(
+        "content",
+        "width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
+      );
+    }
+
+    return () => {
+      meta.setAttribute(
+        "content",
+        "width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
+      );
+    };
+  }, [expanded]);
+
   return (
     <div className="bg-card border border-border rounded-md px-[14px] py-3 mb-2">
       <div className="flex justify-between items-center">
