@@ -37,14 +37,14 @@ function Select({
   onChange,
   children,
 }: {
-  value: string;
+  value: string | undefined;
   onChange: (e: React.ChangeEvent<HTMLSelectElement>) => void;
   children: React.ReactNode;
 }) {
   return (
     <div className="relative">
       <select
-        value={value}
+        value={value ?? ""}
         onChange={onChange}
         className="w-full appearance-none bg-background border border-border rounded-md text-foreground pl-[10px] pr-8 py-[9px] text-xs outline-none cursor-pointer transition-colors hover:border-muted-foreground/50 focus:border-ring focus:ring-2 focus:ring-ring/30"
       >
