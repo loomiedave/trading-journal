@@ -3,6 +3,8 @@ import "./globals.css";
 import NextTopLoader from "nextjs-toploader";
 import { Geist, Geist_Mono } from 'next/font/google'
 import { ThemeProvider } from "@/components/theme-provider";
+import { ThemeColorUpdater } from "@/components/theme-color-updater";
+
 
 const geistSans = Geist({
   subsets: ['latin'],
@@ -26,11 +28,6 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#f7f9fd" },
-    { media: "(prefers-color-scheme: dark)", color: "#131722" },
-  ],
-
     width: 'device-width',
     initialScale: 1,
     maximumScale: 1,
@@ -51,6 +48,7 @@ export default function RootLayout({
           enableColorScheme
           disableTransitionOnChange
         >
+          <ThemeColorUpdater />
           <NextTopLoader
             color="#4f7cff"
             height={4}
