@@ -1,6 +1,7 @@
-// components/theme-color-updater.tsx
+// theme-color-updater.tsx
 "use client";
 import { useEffect } from "react";
+import { usePathname } from "next/navigation";
 import { useTheme } from "next-themes";
 
 const LIGHT = "#f7f9fd";
@@ -8,17 +9,21 @@ const DARK = "#131722";
 
 export function ThemeColorUpdater() {
   const { resolvedTheme } = useTheme();
+  const pathname = usePathname();
 
   useEffect(() => {
     const color = resolvedTheme === "dark" ? DARK : LIGHT;
 
-    document.querySelectorAll('meta[name="theme-color"]').forEach((el) => el.remove());
+    // Remove any media-gated tags Next may have re-inserted on this navigation
+    document
+      .querySelectorAll('meta[name="theme-color"]')
+      .forEach((el) => el.remove());
 
     const meta = document.createElement("meta");
     meta.setAttribute("name", "theme-color");
     meta.setAttribute("content", color);
     document.head.appendChild(meta);
-  }, [resolvedTheme]);
+  }, [resolvedTheme, pathname]);
 
   return null;
 }

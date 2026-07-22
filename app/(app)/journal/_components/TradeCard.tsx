@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef } from "react";
 import { Trade } from "@/types/type";
 import { OUTCOME_LABEL } from "../_config/config";
-import { getToday, getSignedScreenshotUrl } from "../_actions/trades";
+import { getSignedScreenshotUrl } from "../_actions/trades";
 
 const fmt = (v: number) =>
   v >= 0 ? `+$${v.toFixed(2)}` : `-$${Math.abs(v).toFixed(2)}`;
@@ -15,6 +15,27 @@ const outcomeColorClass = (outcome: string) =>
     : outcome === "loss"
       ? "text-destructive"
       : "text-warning";
+const stripColorClass = (outcome: string) =>
+  outcome === "win"
+    ? "bg-success"
+    : outcome === "loss"
+      ? "bg-destructive"
+      : "bg-warning";
+
+function formatShortDate(dateStr: string) {
+  const d = new Date(dateStr + "T00:00:00");
+  if (isNaN(d.getTime())) return dateStr;
+  return d.toLocaleDateString("en-US", { day: "numeric", month: "short" });
+}
+
+function rSideLabel(trade: Trade) {
+  if (trade.outcome === "breakeven") return "BE";
+  if (trade.rr_achieved != null) {
+    const sign = trade.outcome === "loss" ? "-" : "";
+    return `${sign}${Math.abs(trade.rr_achieved)}R`;
+  }
+  return null;
+}
 
 export default function TradeCard({
   trade,
@@ -25,12 +46,12 @@ export default function TradeCard({
   onDelete: (id: string) => void;
   onEdit: (trade: Trade) => void;
 }) {
-  const today = getToday();
   const [screenshotUrl, setScreenshotUrl] = useState<string | null>(null);
-  const [expanded, setExpanded] = useState(false);
+  const [rowExpanded, setRowExpanded] = useState(false);
+  const [imageExpanded, setImageExpanded] = useState(false);
   const [confirmDelete, setConfirmDelete] = useState(false);
 
-  // Pinch-zoom state for the expanded image overlay (CSS transform only —
+  // Pinch-zoom state for the fullscreen image overlay (CSS transform only —
   // never touches the viewport meta tag, so PWA standalone mode stays intact)
   const [scale, setScale] = useState(1);
   const lastDist = useRef<number | null>(null);
@@ -66,127 +87,162 @@ export default function TradeCard({
     lastDist.current = null;
   }
 
-  function closeExpanded() {
-    setExpanded(false);
+  function closeImageExpanded() {
+    setImageExpanded(false);
     setScale(1);
   }
 
+  const rLabel = rSideLabel(trade);
+
   return (
-    <div className="bg-card border border-border rounded-md px-[14px] py-3 mb-2">
-      <div className="flex justify-between items-center">
-        <span className="text-xs font-semibold text-card-foreground">
-          {trade.pair}
-        </span>
-        <span className="text-[14px] text-muted-foreground">
-          {trade.direction}
-        </span>
-      </div>
-
-      {screenshotUrl && (
-        <>
-          <img
-            src={screenshotUrl}
-            alt="Trade screenshot"
-            onClick={() => setExpanded(true)}
-            className="w-full rounded-md border border-border mt-2 max-h-[160px] object-cover cursor-pointer"
-          />
-          {expanded && (
-            <div
-              onClick={closeExpanded}
-              onTouchMove={onImageTouchMove}
-              onTouchEnd={onImageTouchEnd}
-              className="fixed inset-0 bg-black/90 flex items-center justify-center z-[200] p-4 cursor-zoom-out overflow-hidden"
-            >
-              <img
-                src={screenshotUrl}
-                alt="Trade screenshot expanded"
-                onClick={(e) => e.stopPropagation()}
-                style={{
-                  transform: `scale(${scale})`,
-                  transition: lastDist.current ? "none" : "transform 0.15s",
-                }}
-                className="max-w-full max-h-full rounded-md object-contain"
-              />
-              <button
-                onClick={closeExpanded}
-                className="absolute top-4 right-4 text-white text-2xl bg-black/50 rounded-full w-10 h-10 flex items-center justify-center"
-              >
-                ✕
-              </button>
-            </div>
-          )}
-        </>
-      )}
-
-      <div className="flex justify-between items-center mt-1">
-        <span className={`text-[15px] font-semibold ${outcomeColorClass(trade.outcome)}`}>
-          {OUTCOME_LABEL[trade.outcome]}
-        </span>
-        {trade.result != null && (
-          <span className={`text-xs font-semibold ${resultColorClass(trade.result)}`}>
-            {fmt(trade.result)}
-          </span>
-        )}
-      </div>
-      {trade.strategy && (
-        <div className="text-[14px] text-primary mt-1">
-          {trade.strategy}
-        </div>
-      )}
-      {(trade.risk != null ||
-        trade.rr_planned != null ||
-        trade.rr_achieved != null) && (
-        <div className="flex gap-4 mt-2 text-[14px] text-muted-foreground">
-          {trade.risk != null && (
-            <span>
-              RISK <span className="text-foreground">${trade.risk}</span>
-            </span>
-          )}
-          {trade.rr_planned != null && (
-            <span>
-              PLAN <span className="text-foreground">{trade.rr_planned}R</span>
-            </span>
-          )}
-          {trade.rr_achieved != null && (
-            <span>
-              GOT{" "}
-              <span
-                className={
-                  trade.rr_achieved >= (trade.rr_planned || 0)
-                    ? "text-success"
-                    : "text-warning"
-                }
-              >
-                {trade.rr_achieved}R
+    <div className="bg-card border border-border rounded-md overflow-hidden mb-2">
+      {/* Collapsed row — tap to expand */}
+      <button
+        type="button"
+        onClick={() => setRowExpanded((v) => !v)}
+        className="w-full flex items-stretch text-left bg-transparent border-none cursor-pointer p-0"
+      >
+        <span className={`w-1 shrink-0 ${stripColorClass(trade.outcome)}`} />
+        <span className="flex-1 min-w-0 flex justify-between items-center px-3 py-[10px] gap-2">
+          <span className="min-w-0">
+            <span className="flex items-baseline gap-[6px]">
+              <span className="text-xs font-semibold text-card-foreground">
+                {trade.pair}
+              </span>
+              <span className="text-[14px] text-muted-foreground">
+                {trade.direction}
               </span>
             </span>
-          )}
-        </div>
-      )}
-      {trade.notes && (
-        <div className="text-[15px] text-muted-foreground mt-2">{trade.notes}</div>
-      )}
-      <div className="flex justify-between items-center mt-2">
-        <span className="text-[14px] text-muted-foreground/70">
-          {trade.date}
-        </span>
-        <div className="flex gap-3">
-          <button
-            onClick={() => onEdit(trade)}
-            className="text-[14px] text-muted-foreground/70 bg-transparent border-none cursor-pointer p-0 hover:text-primary"
-          >
-            ✎ edit
-          </button>
-          {trade.id && (
-            <button
-              onClick={() => setConfirmDelete(true)}
-              className="text-[14px] text-muted-foreground/70 bg-transparent border-none cursor-pointer p-0 hover:text-destructive"
+            <span className="block text-[14px] text-muted-foreground truncate mt-[2px]">
+              {trade.strategy || OUTCOME_LABEL[trade.outcome]}
+              {trade.strategy ? ` · ${formatShortDate(trade.date)}` : ""}
+            </span>
+          </span>
+          <span className="shrink-0 flex items-center gap-2">
+            <span className="text-right">
+              {trade.result != null && (
+                <span className={`block text-[15px] font-semibold ${resultColorClass(trade.result)}`}>
+                  {fmt(trade.result)}
+                </span>
+              )}
+              {rLabel && (
+                <span className={`block text-[13px] ${outcomeColorClass(trade.outcome)}`}>
+                  {rLabel}
+                </span>
+              )}
+            </span>
+            <svg
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              className={`text-muted-foreground transition-transform ${rowExpanded ? "rotate-180" : ""}`}
             >
-              ✕ delete
-            </button>
+              <path d="M6 9l6 6 6-6" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
+          </span>
+        </span>
+      </button>
+
+      {/* Expanded details */}
+      {rowExpanded && (
+        <div className="px-3 pb-3">
+          {screenshotUrl && (
+            <img
+              src={screenshotUrl}
+              alt="Trade screenshot"
+              onClick={() => setImageExpanded(true)}
+              className="w-full rounded-md border border-border mt-1 max-h-[200px] object-cover cursor-pointer"
+            />
           )}
+
+          {(trade.risk != null ||
+            trade.rr_planned != null ||
+            trade.rr_achieved != null) && (
+            <div className="flex gap-4 mt-3 text-[14px] text-muted-foreground">
+              {trade.risk != null && (
+                <span>
+                  RISK <span className="text-foreground">${trade.risk}</span>
+                </span>
+              )}
+              {trade.rr_planned != null && (
+                <span>
+                  PLAN <span className="text-foreground">{trade.rr_planned}R</span>
+                </span>
+              )}
+              {trade.rr_achieved != null && (
+                <span>
+                  GOT{" "}
+                  <span
+                    className={
+                      trade.rr_achieved >= (trade.rr_planned || 0)
+                        ? "text-success"
+                        : "text-warning"
+                    }
+                  >
+                    {trade.rr_achieved}R
+                  </span>
+                </span>
+              )}
+            </div>
+          )}
+
+          {trade.notes && (
+            <div className="text-[15px] text-muted-foreground mt-3">{trade.notes}</div>
+          )}
+
+          <div className="flex justify-between items-center mt-3">
+            <span className="text-[14px] text-muted-foreground/70">
+              {formatShortDate(trade.date)}
+            </span>
+            <div className="flex gap-3">
+              <button
+                onClick={() => onEdit(trade)}
+                className="text-[14px] text-muted-foreground/70 bg-transparent border-none cursor-pointer p-0 hover:text-primary"
+              >
+                ✎ edit
+              </button>
+              {trade.id && (
+                <button
+                  onClick={() => setConfirmDelete(true)}
+                  className="text-[14px] text-muted-foreground/70 bg-transparent border-none cursor-pointer p-0 hover:text-destructive"
+                >
+                  ✕ delete
+                </button>
+              )}
+            </div>
+          </div>
         </div>
-      </div>
+      )}
+
+      {/* Fullscreen pinch-zoom image overlay */}
+      {imageExpanded && screenshotUrl && (
+        <div
+          onClick={closeImageExpanded}
+          onTouchMove={onImageTouchMove}
+          onTouchEnd={onImageTouchEnd}
+          className="fixed inset-0 bg-black/90 flex items-center justify-center z-[200] p-4 cursor-zoom-out overflow-hidden"
+        >
+          <img
+            src={screenshotUrl}
+            alt="Trade screenshot expanded"
+            onClick={(e) => e.stopPropagation()}
+            style={{
+              transform: `scale(${scale})`,
+              transition: lastDist.current ? "none" : "transform 0.15s",
+            }}
+            className="max-w-full max-h-full rounded-md object-contain"
+          />
+          <button
+            onClick={closeImageExpanded}
+            className="absolute top-4 right-4 text-white text-2xl bg-black/50 rounded-full w-10 h-10 flex items-center justify-center"
+          >
+            ✕
+          </button>
+        </div>
+      )}
 
       {confirmDelete && (
         <div
@@ -201,7 +257,7 @@ export default function TradeCard({
               Delete this trade?
             </div>
             <div className="text-[15px] text-muted-foreground mb-4">
-              {trade.pair} · {trade.date} — this can't be undone.
+              {trade.pair} · {formatShortDate(trade.date)} — this can't be undone.
             </div>
             <div className="flex gap-[10px]">
               <button

@@ -18,7 +18,6 @@ import {
 import TradeCard from "./_components/TradeCard";
 import { getToday } from "./_actions/trades";
 import TradeModal from "./_components/TradeModal";
-import TradeGallery from "./_components/TradeGallery";
 
 function Field({
   label,
@@ -40,7 +39,7 @@ export default function Journal() {
   const [showModal, setShowModal] = useState(false);
   const [form, setForm] = useState<Trade>(empty);
   const [saving, setSaving] = useState(false);
-  const [tab, setTab] = useState<"today" | "history" | "gallery">("today");
+  const [tab, setTab] = useState<"today" | "history">("today");
   const router = useRouter();
   const [editingTrade, setEditingTrade] = useState<Trade | null>(null);
 
@@ -104,7 +103,7 @@ export default function Journal() {
     <div className="bg-background min-h-screen text-foreground w-full mt-2">
       {/* Tabs */}
       <div className="flex border-b border-border px-5">
-        {(["today", "history", "gallery"] as const).map((t) => (
+        {(["today", "history"] as const).map((t) => (
           <button
             key={t}
             onClick={() => setTab(t)}
@@ -120,10 +119,6 @@ export default function Journal() {
       </div>
 
       <div className="px-5 pt-4 pb-[100px]">
-        {tab === "gallery" && (
-          <TradeGallery trades={trades} />
-        )}
-
         {tab === "today" && (
           <>
             {todayTrades.length === 0 && (
