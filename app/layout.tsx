@@ -3,7 +3,6 @@ import "./globals.css";
 import NextTopLoader from "nextjs-toploader";
 import { Geist, Geist_Mono } from 'next/font/google'
 import { ThemeProvider } from "@/components/theme-provider";
-import { ThemeSync } from "@/components/theme-sync";
 
 const geistSans = Geist({
   subsets: ['latin'],
@@ -62,7 +61,6 @@ export default function RootLayout({
             shadow="0 0 10px #4f7cff, 0 0 5px #4f7cff"
             zIndex={9999}
           />
-          <ThemeSync />
           {children}
         </ThemeProvider>
       </body>
