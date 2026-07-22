@@ -12,13 +12,12 @@ export function ThemeColorUpdater() {
   useEffect(() => {
     const color = resolvedTheme === "dark" ? DARK : LIGHT;
 
-    let meta = document.querySelector('meta[name="theme-color"]');
-    if (!meta) {
-      meta = document.createElement("meta");
-      meta.setAttribute("name", "theme-color");
-      document.head.appendChild(meta);
-    }
+    document.querySelectorAll('meta[name="theme-color"]').forEach((el) => el.remove());
+
+    const meta = document.createElement("meta");
+    meta.setAttribute("name", "theme-color");
     meta.setAttribute("content", color);
+    document.head.appendChild(meta);
   }, [resolvedTheme]);
 
   return null;

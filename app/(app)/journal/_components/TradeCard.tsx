@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Trade } from "@/types/type";
 import { OUTCOME_LABEL } from "../_config/config";
 import { getToday, getSignedScreenshotUrl } from "../_actions/trades";
@@ -30,6 +30,11 @@ export default function TradeCard({
   const [expanded, setExpanded] = useState(false);
   const [confirmDelete, setConfirmDelete] = useState(false);
 
+  // Pinch-zoom state for the expanded image overlay (CSS transform only —
+  // never touches the viewport meta tag, so PWA standalone mode stays intact)
+  const [scale, setScale] = useState(1);
+  const lastDist = useRef<number | null>(null);
+
   useEffect(() => {
     let cancelled = false;
 
@@ -46,31 +51,25 @@ export default function TradeCard({
     };
   }, [trade.screenshot_url]);
 
-  // Allow pinch-zoom only while the expanded image overlay is open,
-  // then restore the app's normal locked-zoom viewport on close/unmount.
-  useEffect(() => {
-    const meta = document.querySelector('meta[name="viewport"]');
-    if (!meta) return;
-
-    if (expanded) {
-      meta.setAttribute(
-        "content",
-        "width=device-width, initial-scale=1, maximum-scale=5, user-scalable=yes"
-      );
-    } else {
-      meta.setAttribute(
-        "content",
-        "width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
-      );
+  function onImageTouchMove(e: React.TouchEvent) {
+    if (e.touches.length === 2) {
+      const [a, b] = [e.touches[0], e.touches[1]];
+      const dist = Math.hypot(a.clientX - b.clientX, a.clientY - b.clientY);
+      if (lastDist.current != null) {
+        setScale((s) => Math.min(4, Math.max(1, s * (dist / lastDist.current!))));
+      }
+      lastDist.current = dist;
     }
+  }
 
-    return () => {
-      meta.setAttribute(
-        "content",
-        "width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
-      );
-    };
-  }, [expanded]);
+  function onImageTouchEnd() {
+    lastDist.current = null;
+  }
+
+  function closeExpanded() {
+    setExpanded(false);
+    setScale(1);
+  }
 
   return (
     <div className="bg-card border border-border rounded-md px-[14px] py-3 mb-2">
@@ -93,16 +92,23 @@ export default function TradeCard({
           />
           {expanded && (
             <div
-              onClick={() => setExpanded(false)}
-              className="fixed inset-0 bg-black/90 flex items-center justify-center z-[200] p-4 cursor-zoom-out"
+              onClick={closeExpanded}
+              onTouchMove={onImageTouchMove}
+              onTouchEnd={onImageTouchEnd}
+              className="fixed inset-0 bg-black/90 flex items-center justify-center z-[200] p-4 cursor-zoom-out overflow-hidden"
             >
               <img
                 src={screenshotUrl}
                 alt="Trade screenshot expanded"
+                onClick={(e) => e.stopPropagation()}
+                style={{
+                  transform: `scale(${scale})`,
+                  transition: lastDist.current ? "none" : "transform 0.15s",
+                }}
                 className="max-w-full max-h-full rounded-md object-contain"
               />
               <button
-                onClick={() => setExpanded(false)}
+                onClick={closeExpanded}
                 className="absolute top-4 right-4 text-white text-2xl bg-black/50 rounded-full w-10 h-10 flex items-center justify-center"
               >
                 ✕
