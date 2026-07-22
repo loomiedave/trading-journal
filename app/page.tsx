@@ -7,7 +7,6 @@ async function AuthCheck() {
   const {
     data: { user },
   } = await supabase.auth.getUser();
-
   return <OnboardingContent signedIn={!!user} />;
 }
 
@@ -15,8 +14,8 @@ export default function Home() {
   return (
     <Suspense
       fallback={
-        <div className="min-h-screen bg-[#0e1015] flex items-center justify-center">
-          <div className="w-6 h-6 border-2 border-[#4f7cff] border-t-transparent rounded-full animate-spin" />
+        <div className="min-h-screen bg-background flex items-center justify-center">
+          <div className="w-6 h-6 border-2 border-primary border-t-transparent rounded-full animate-spin" />
         </div>
       }
     >

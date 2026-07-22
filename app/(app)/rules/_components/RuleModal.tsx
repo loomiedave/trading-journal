@@ -1,7 +1,6 @@
 "use client";
-
 const inputClass =
-  "w-full bg-[#0e1015] border border-[#222630] rounded-md text-[#e8ecf4] px-[10px] py-[9px] text-xs font-mono outline-none box-border";
+  "w-full bg-background border border-border rounded-md text-foreground px-[10px] py-[9px] text-xs outline-none box-border";
 
 export default function RuleModal({
   label,
@@ -14,7 +13,7 @@ export default function RuleModal({
   onSave,
   textPlaceholder,
 }: {
-  label: string; // e.g. "RULE" or "ITEM"
+  label: string;
   section: string;
   editingId: string | null;
   form: { section: string; text: string; note: string };
@@ -26,12 +25,12 @@ export default function RuleModal({
 }) {
   return (
     <div className="fixed inset-0 bg-black/70 flex items-end z-[100]">
-      <div className="bg-[#151820] border-t border-[#222630] rounded-t-2xl w-full px-5 pt-6 pb-10">
-        <div className="font-mono text-[11px] tracking-[0.15em] text-[#6b7280] mb-4">
+      <div className="bg-card border-t border-border rounded-t-2xl w-full px-5 pt-6 pb-10">
+        <div className="text-[15px] tracking-[0.15em] text-muted-foreground mb-4">
           {editingId ? `EDIT ${label}` : `ADD ${label} — ${section}`}
         </div>
         <div className="mb-[10px]">
-          <div className="text-[11px] text-[#6b7280] mb-1">{label}</div>
+          <div className="text-[15px] text-muted-foreground mb-1">{label}</div>
           <input
             type="text"
             placeholder={textPlaceholder}
@@ -41,7 +40,7 @@ export default function RuleModal({
           />
         </div>
         <div className="mb-4">
-          <div className="text-[11px] text-[#6b7280] mb-1">NOTE (optional)</div>
+          <div className="text-[15px] text-muted-foreground mb-1">NOTE (optional)</div>
           <input
             type="text"
             placeholder="Extra context..."
@@ -53,14 +52,14 @@ export default function RuleModal({
         <div className="flex gap-[10px]">
           <button
             onClick={onCancel}
-            className="flex-1 py-[11px] rounded-md border border-[#222630] bg-transparent text-[#6b7280] font-mono text-[11px] cursor-pointer"
+            className="flex-1 py-[11px] rounded-md border border-border bg-transparent text-muted-foreground text-[15px] cursor-pointer"
           >
             CANCEL
           </button>
           <button
             onClick={onSave}
             disabled={saving}
-            className="flex-[2] py-[11px] rounded-md border-none bg-[#4f7cff] text-white font-mono text-[11px] font-semibold cursor-pointer disabled:opacity-50"
+            className="flex-[2] py-[11px] rounded-md border-none bg-primary text-primary-foreground text-[15px] font-semibold cursor-pointer disabled:opacity-50"
           >
             {saving ? "SAVING..." : "SAVE"}
           </button>

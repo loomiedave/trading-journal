@@ -31,22 +31,22 @@ export function UpdatePasswordForm({
 
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
-      <div className="min-h-screen bg-[#0e1015] flex items-center justify-center font-mono px-4">
+      <div className="min-h-screen bg-[#0e1015] flex items-center justify-center px-4">
         <div className="bg-[#151820] border border-[#222630] rounded-xl px-7 py-8 w-full max-w-[360px]">
-          <div className="text-[#4f7cff] text-[11px] tracking-[0.2em] mb-6">
+          <div className="text-[#4f7cff] text-[15px] tracking-[0.2em] mb-6">
             PRE-TRADE
           </div>
           <div className="text-[#e8ecf4] text-base font-semibold mb-1">
             New password
           </div>
-          <div className="text-[#6b7280] text-[11px] mb-6">
+          <div className="text-[#6b7280] text-[15px] mb-6">
             Enter your new password below
           </div>
           <form onSubmit={handleForgotPassword} className="flex flex-col gap-4">
             <div>
               <label
                 htmlFor="password"
-                className="text-[11px] text-[#6b7280] block mb-1"
+                className="text-[15px] text-[#6b7280] block mb-1"
               >
                 NEW PASSWORD
               </label>
@@ -57,14 +57,14 @@ export function UpdatePasswordForm({
                 required
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full bg-[#0e1015] border border-[#222630] rounded-md text-[#e8ecf4] px-3 py-[10px] text-[13px] outline-none box-border"
+                className="w-full bg-[#0e1015] border border-[#222630] rounded-md text-[#e8ecf4] px-3 py-[10px] text-[15px] outline-none box-border"
               />
             </div>
             {error && <p className="text-[#e05252] text-xs">{error}</p>}
             <button
               type="submit"
               disabled={isLoading}
-              className="w-full bg-[#4f7cff] border-none rounded-md text-white py-[11px] text-xs font-semibold cursor-pointer tracking-[0.1em] disabled:opacity-50 mt-1"
+              className="w-full bg-primary border-none rounded-md text-primary-foreground py-[11px] text-xs font-semibold cursor-pointer tracking-[0.1em] disabled:opacity-50 mt-1"
             >
               {isLoading ? "Saving..." : "SAVE NEW PASSWORD"}
             </button>

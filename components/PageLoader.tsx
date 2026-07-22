@@ -12,8 +12,8 @@ export default function PageLoader() {
   }, []);
 
   return (
-    <div className="bg-[#0e1015] min-h-screen flex items-center justify-center">
-      <div className="font-mono text-xs text-[#6b7280] w-[70px]">
+    <div className="bg-background min-h-screen flex items-center justify-center">
+      <div className=" text-xs text-foreground w-[70px]">
         Loading{".".repeat(dots)}
       </div>
     </div>

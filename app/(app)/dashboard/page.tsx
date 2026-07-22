@@ -14,7 +14,6 @@ import {
 import ChecklistItem from "./_components/ChecklistItem";
 import ChecklistItemModal from "./_components/ChecklistItemModal";
 
-// Fixed this shit at module scope so sections never disappear when items are deleted
 const ALL_SECTIONS = [...new Set(DEFAULT_CHECKLIST.map((d) => d.section))];
 
 function getToday() {
@@ -159,11 +158,11 @@ export default function Dashboard() {
   const TOTAL = merged.length;
 
   return (
-    <div className="bg-[#0e1015] min-h-screen font-mono text-[#c9cdd6] w-full">
+    <div className="bg-background min-h-screen text-foreground w-full">
       <div className="px-5 pt-4 pb-[120px]">
         {ALL_SECTIONS.map((section) => (
           <div key={section}>
-            <div className="text-[9px] tracking-[0.2em] text-[#6b7280] mt-5 mb-[10px] uppercase">
+            <div className="text-[15px] tracking-[0.2em] text-muted-foreground mt-5 mb-[10px] uppercase">
               {section}
             </div>
             {merged
@@ -180,54 +179,54 @@ export default function Dashboard() {
               ))}
             <button
               onClick={() => openAdd(section)}
-              className="w-full py-[9px] border border-dashed border-[#3a4050] rounded-md text-[#3a4050] text-[10px] tracking-[0.1em] bg-transparent cursor-pointer hover:border-[#4f7cff] hover:text-[#4f7cff] mb-2"
+              className="w-full py-[9px] border border-dashed border-border rounded-md text-muted-foreground text-[14px] tracking-[0.1em] bg-transparent cursor-pointer hover:border-primary hover:text-primary mb-2"
             >
               + ADD ITEM
             </button>
           </div>
         ))}
 
-        <div className="mt-6 px-4 py-[14px] rounded-lg border border-[#3d2222] bg-[#1a1414] flex items-center justify-between">
+        <div className="mt-6 px-4 py-[14px] rounded-lg border border-destructive/30 bg-destructive/10 flex items-center justify-between">
           <div>
-            <div className="text-[#e05252] text-xs font-semibold">
+            <div className="text-destructive text-xs font-semibold">
               KILL SWITCH
             </div>
-            <div className="text-[#6b7280] text-[11px] mt-[2px]">
+            <div className="text-muted-foreground text-[15px] mt-[2px]">
               3 fails today → sit out
             </div>
           </div>
           <button
             onClick={toggleKill}
-            className="font-mono text-[11px] font-semibold px-[14px] py-2 rounded-[5px] border-[1.5px] border-[#e05252] cursor-pointer"
-            style={{
-              background: killed ? "#e05252" : "transparent",
-              color: killed ? "#fff" : "#e05252",
-            }}
+            className={` text-[15px] font-semibold px-[14px] py-2 rounded-[5px] border-[1.5px] border-destructive cursor-pointer ${
+              killed
+                ? "bg-destructive text-destructive-foreground"
+                : "bg-transparent text-destructive"
+            }`}
           >
             {killed ? "TRIGGERED" : "ARMED"}
           </button>
         </div>
       </div>
 
-      <div className="fixed bottom-0 left-0 right-0 bg-[#0e1015] border-t border-[#222630] px-5 pt-[10px] pb-[14px]">
+      <div className="fixed bottom-0 left-0 right-0 bg-background border-t border-border px-5 pt-[10px] pb-[14px]">
         <div className="flex justify-between mb-[6px]">
-          <span className="text-[10px] text-[#6b7280] tracking-[0.1em]">
+          <span className="text-[14px] text-muted-foreground tracking-[0.1em]">
             CHECKLIST
           </span>
-          <span className="text-[10px] text-[#4f7cff] font-mono">
+          <span className="text-[14px] text-primary">
             {checks.length} / {TOTAL}
           </span>
         </div>
-        <div className="h-[3px] bg-[#222630] rounded-full">
+        <div className="h-[3px] bg-secondary rounded-full">
           <div
-            className="h-full bg-[#4f7cff] rounded-full transition-[width] duration-300"
+            className="h-full bg-primary rounded-full transition-[width] duration-300"
             style={{ width: `${TOTAL ? (checks.length / TOTAL) * 100 : 0}%` }}
           />
         </div>
         <div className="text-right mt-2">
           <span
             onClick={reset}
-            className="text-[10px] text-[#6b7280] cursor-pointer tracking-[0.1em]"
+            className="text-[14px] text-muted-foreground cursor-pointer tracking-[0.1em]"
           >
             RESET DAY
           </span>

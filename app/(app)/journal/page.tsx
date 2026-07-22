@@ -18,6 +18,7 @@ import {
 import TradeCard from "./_components/TradeCard";
 import { getToday } from "./_actions/trades";
 import TradeModal from "./_components/TradeModal";
+import TradeGallery from "./_components/TradeGallery";
 
 function Field({
   label,
@@ -28,7 +29,7 @@ function Field({
 }) {
   return (
     <div>
-      <div className="text-[11px] text-[#6b7280] mb-1">{label}</div>
+      <div className="text-[15px] text-muted-foreground mb-1">{label}</div>
       {children}
     </div>
   );
@@ -39,7 +40,7 @@ export default function Journal() {
   const [showModal, setShowModal] = useState(false);
   const [form, setForm] = useState<Trade>(empty);
   const [saving, setSaving] = useState(false);
-  const [tab, setTab] = useState<"today" | "history">("today");
+  const [tab, setTab] = useState<"today" | "history" | "gallery">("today");
   const router = useRouter();
   const [editingTrade, setEditingTrade] = useState<Trade | null>(null);
 
@@ -95,23 +96,23 @@ export default function Journal() {
   const historyTrades = trades.filter((t) => t.date !== today);
 
   const selectClass =
-    "w-full bg-[#0e1015] border border-[#222630] rounded-md text-[#e8ecf4] px-[10px] py-[9px] text-xs font-mono outline-none";
+    "w-full bg-background border border-border rounded-md text-foreground px-[10px] py-[9px] text-xs outline-none";
   const inputClass =
-    "w-full bg-[#0e1015] border border-[#222630] rounded-md text-[#e8ecf4] px-[10px] py-[9px] text-xs font-mono outline-none box-border";
+    "w-full bg-background border border-border rounded-md text-foreground px-[10px] py-[9px] text-xs outline-none box-border";
 
   return (
-    <div className="bg-[#0e1015] min-h-screen font-mono text-[#c9cdd6] w-full mt-2">
+    <div className="bg-background min-h-screen text-foreground w-full mt-2">
       {/* Tabs */}
-      <div className="flex border-b border-[#222630] px-5">
-        {(["today", "history"] as const).map((t) => (
+      <div className="flex border-b border-border px-5">
+        {(["today", "history", "gallery"] as const).map((t) => (
           <button
             key={t}
             onClick={() => setTab(t)}
-            className="font-mono text-[10px] tracking-[0.12em] font-semibold px-3 pt-[10px] pb-[9px] bg-transparent border-none cursor-pointer"
-            style={{
-              color: tab === t ? "#e8ecf4" : "#6b7280",
-              borderBottom: `2px solid ${tab === t ? "#4f7cff" : "transparent"}`,
-            }}
+            className={`text-[14px] tracking-[0.12em] font-semibold px-3 pt-[10px] pb-[9px] bg-transparent border-none cursor-pointer border-b-2 ${
+              tab === t
+                ? "text-foreground border-primary"
+                : "text-muted-foreground border-transparent"
+            }`}
           >
             {t.toUpperCase()}
           </button>
@@ -119,10 +120,14 @@ export default function Journal() {
       </div>
 
       <div className="px-5 pt-4 pb-[100px]">
+        {tab === "gallery" && (
+          <TradeGallery trades={trades} />
+        )}
+
         {tab === "today" && (
           <>
             {todayTrades.length === 0 && (
-              <div className="text-[#6b7280] text-xs py-3">
+              <div className="text-muted-foreground text-xs py-3">
                 No trades logged today.
               </div>
             )}
@@ -139,7 +144,7 @@ export default function Journal() {
         {tab === "history" && (
           <>
             {historyTrades.length === 0 && (
-              <div className="text-[#6b7280] text-xs py-3">No history yet.</div>
+              <div className="text-muted-foreground text-xs py-3">No history yet.</div>
             )}
             {historyTrades.map((t) => (
               <TradeCard
@@ -156,7 +161,7 @@ export default function Journal() {
       {/* FAB */}
       <button
         onClick={() => setShowModal(true)}
-        className="fixed bottom-6 right-6 bg-[#4f7cff] border-none rounded-full w-[52px] h-[52px] text-2xl text-white cursor-pointer shadow-[0_4px_20px_rgba(79,124,255,0.4)] z-10"
+        className="fixed bottom-6 right-6 bg-primary border-none rounded-full w-[52px] h-[52px] text-2xl text-primary-foreground cursor-pointer shadow-[0_4px_20px_hsl(var(--primary)/0.4)] z-10"
       >
         +
       </button>

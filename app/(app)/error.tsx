@@ -1,5 +1,4 @@
 "use client";
-
 export default function Error({
   error,
   reset,
@@ -8,9 +7,9 @@ export default function Error({
   reset: () => void;
 }) {
   return (
-    <div className="bg-[#0e1015] min-h-screen flex flex-col items-center justify-center gap-3 text-[#6b7280] font-mono text-xs px-6 text-center">
+    <div className="bg-background min-h-screen flex flex-col items-center justify-center gap-3 text-muted-foreground text-xs px-6 text-center">
       <div>Something went wrong. Check your connection and try again.</div>
-      <button onClick={reset} className="text-[#4f7cff] underline">
+      <button onClick={reset} className="text-primary underline">
         Retry
       </button>
     </div>

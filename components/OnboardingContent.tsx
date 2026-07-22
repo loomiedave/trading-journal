@@ -12,9 +12,9 @@ export default function OnboardingContent({ signedIn }: { signedIn: boolean }) {
   }, []);
 
   return (
-    <div className="bg-[#0e1015] min-h-screen flex flex-col items-center justify-center px-6 font-mono">
+    <div className="bg-[#0e1015] min-h-screen flex flex-col items-center justify-center px-6">
       <span
-        className="text-[#4f7cff] text-[11px] font-semibold tracking-[0.2em] mb-8 transition-all duration-700"
+        className="text-[#4f7cff] text-[15px] font-semibold tracking-[0.2em] mb-8 transition-all duration-700"
         style={{
           opacity: visible ? 1 : 0,
           transform: visible ? "translateY(0)" : "translateY(-8px)",

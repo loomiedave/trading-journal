@@ -4,6 +4,8 @@ import { createClient } from "@/lib/supabase/client";
 import { useRouter } from "next/navigation";
 import { statsTrade } from "@/types/type";
 import PageLoader from "@/components/PageLoader";
+import TradeCalendar from "@/app/(app)/stats/_components/TradeCalendar";
+import EquityCurve from "@/components/EquityCurve";
 
 export default function Stats() {
   const [trades, setTrades] = useState<statsTrade[]>([]);
@@ -96,25 +98,22 @@ export default function Stats() {
   });
 
   const fmt = (v: number) => `${v >= 0 ? "+" : "-"}$${Math.abs(v).toFixed(2)}`;
-  const pnlColor = (v: number) => (v >= 0 ? "#3ecf72" : "#e05252");
+  const pnlColorClass = (v: number) => (v >= 0 ? "text-success" : "text-destructive");
 
   const StatCard = ({
     label,
     value,
-    color,
+    colorClass,
   }: {
     label: string;
     value: string;
-    color?: string;
+    colorClass?: string;
   }) => (
-    <div className="bg-[#151820] border border-[#222630] rounded-lg px-[14px] py-3">
-      <div className="font-mono text-[9px] tracking-[0.15em] text-[#6b7280] mb-1">
+    <div className="bg-card border border-border rounded-lg px-[14px] py-3">
+      <div className="text-[15px] tracking-[0.15em] text-muted-foreground mb-1">
         {label}
       </div>
-      <div
-        className="font-mono text-[22px] font-semibold leading-none"
-        style={{ color: color || "#e8ecf4" }}
-      >
+      <div className={`text-[22px] font-semibold leading-none ${colorClass || "text-card-foreground"}`}>
         {value}
       </div>
     </div>
@@ -130,21 +129,18 @@ export default function Stats() {
     pnl: number;
     sub?: string;
   }) => (
-    <div className="flex items-center justify-between px-[14px] py-[10px] bg-[#151820] border border-[#222630] rounded-md mb-[6px]">
+    <div className="flex items-center justify-between px-[14px] py-[10px] bg-card border border-border rounded-md mb-[6px]">
       <div>
-        <div className="font-mono text-xs font-semibold text-[#e8ecf4]">
+        <div className="text-xs font-semibold text-card-foreground">
           {label}
         </div>
         {sub && (
-          <div className="font-mono text-[10px] text-[#6b7280] mt-[2px]">
+          <div className="text-[14px] text-muted-foreground mt-[2px]">
             {sub}
           </div>
         )}
       </div>
-      <span
-        className="font-mono text-xs font-semibold"
-        style={{ color: pnlColor(pnl) }}
-      >
+      <span className={`text-xs font-semibold ${pnlColorClass(pnl)}`}>
         {fmt(pnl)}
       </span>
     </div>
@@ -153,41 +149,44 @@ export default function Stats() {
   if (loading) return <PageLoader />;
 
   return (
-    <div className="bg-[#0e1015] min-h-screen font-mono text-[#c9cdd6] w-full">
+    <div className="bg-background min-h-screen text-foreground w-full">
       <div className="px-5 pt-4 pb-10">
+
+        <TradeCalendar trades={trades} />
+        <EquityCurve trades={trades} />
         {/* Stat cards */}
         <div className="grid grid-cols-2 gap-2 mb-2">
           <StatCard
             label="WIN RATE"
             value={wr != null ? `${wr}%` : "—"}
-            color={wr != null ? (wr >= 50 ? "#3ecf72" : "#e0a752") : undefined}
+            colorClass={wr != null ? (wr >= 50 ? "text-success" : "text-warning") : undefined}
           />
           <StatCard
             label="NET P&L"
             value={withResult.length ? fmt(totalPnl) : "—"}
-            color={withResult.length ? pnlColor(totalPnl) : undefined}
+            colorClass={withResult.length ? pnlColorClass(totalPnl) : undefined}
           />
           <StatCard
             label="AVG WIN"
             value={avgWin != null ? `+$${avgWin.toFixed(2)}` : "—"}
-            color="#3ecf72"
+            colorClass="text-success"
           />
           <StatCard
             label="AVG LOSS"
             value={avgLoss != null ? `-$${Math.abs(avgLoss).toFixed(2)}` : "—"}
-            color="#e05252"
+            colorClass="text-destructive"
           />
           <StatCard label="TRADES" value={String(traded.length)} />
           <StatCard
             label="MISSED"
             value={String(trades.filter((t) => t.outcome === "missed").length)}
-            color="#e0a752"
+            colorClass="text-warning"
           />
         </div>
 
         {weeks.length > 0 && (
           <>
-            <div className="text-[9px] tracking-[0.2em] text-[#6b7280] mt-5 mb-[10px]">
+            <div className="text-[15px] tracking-[0.2em] text-muted-foreground mt-5 mb-[10px]">
               WEEKLY P&L
             </div>
             {weeks.map((w) => (
@@ -202,7 +201,7 @@ export default function Stats() {
 
         {months.length > 0 && (
           <>
-            <div className="text-[9px] tracking-[0.2em] text-[#6b7280] mt-5 mb-[10px]">
+            <div className="text-[15px] tracking-[0.2em] text-muted-foreground mt-5 mb-[10px]">
               MONTHLY P&L
             </div>
             {months.map((m) => (
@@ -222,7 +221,7 @@ export default function Stats() {
 
         {Object.keys(pairMap).length > 0 && (
           <>
-            <div className="text-[9px] tracking-[0.2em] text-[#6b7280] mt-5 mb-[10px]">
+            <div className="text-[15px] tracking-[0.2em] text-muted-foreground mt-5 mb-[10px]">
               BY PAIR
             </div>
             {Object.keys(pairMap)
@@ -244,7 +243,7 @@ export default function Stats() {
 
         {Object.keys(stratMap).length > 0 && (
           <>
-            <div className="text-[9px] tracking-[0.2em] text-[#6b7280] mt-5 mb-[10px]">
+            <div className="text-[15px] tracking-[0.2em] text-muted-foreground mt-5 mb-[10px]">
               BY STRATEGY
             </div>
             {Object.keys(stratMap)

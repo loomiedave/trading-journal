@@ -16,16 +16,15 @@ export default function RuleRow({
   onDelete: (rule: RuleItem) => void;
 }) {
   const [confirmDelete, setConfirmDelete] = useState(false);
-
   return (
     <div
       className={`px-[14px] py-[11px] border rounded-md mb-[6px] ${cardClass}`}
     >
       <div className="flex justify-between items-start gap-2">
         <div className="flex-1">
-          <div className={`text-[13px] ${textClass}`}>{rule.text}</div>
+          <div className={`text-[15px] ${textClass}`}>{rule.text}</div>
           {rule.note && (
-            <div className="text-[11px] text-[#6b7280] mt-[2px]">
+            <div className="text-[15px] text-muted-foreground mt-[2px]">
               {rule.note}
             </div>
           )}
@@ -33,19 +32,18 @@ export default function RuleRow({
         <div className="flex gap-3 shrink-0">
           <button
             onClick={() => onEdit(rule)}
-            className="text-[20px] text-[#3a4050] bg-transparent border-none cursor-pointer p-0 hover:text-[#4f7cff]"
+            className="text-[20px] text-muted-foreground bg-transparent border-none cursor-pointer p-0 hover:text-primary"
           >
             ✎
           </button>
           <button
             onClick={() => setConfirmDelete(true)}
-            className="text-[20px] text-[#3a4050] bg-transparent border-none cursor-pointer p-0 hover:text-[#e05252]"
+            className="text-[20px] text-muted-foreground bg-transparent border-none cursor-pointer p-0 hover:text-destructive"
           >
             ✕
           </button>
         </div>
       </div>
-
       {confirmDelete && (
         <div
           onClick={() => setConfirmDelete(false)}
@@ -53,18 +51,18 @@ export default function RuleRow({
         >
           <div
             onClick={(e) => e.stopPropagation()}
-            className="bg-[#151820] border border-[#222630] rounded-lg px-5 py-5 max-w-[300px] w-full"
+            className="bg-card border border-border rounded-lg px-5 py-5 max-w-[300px] w-full"
           >
-            <div className="font-mono text-xs text-[#e8ecf4] font-semibold mb-1">
+            <div className="text-xs text-card-foreground font-semibold mb-1">
               Delete this rule?
             </div>
-            <div className="font-mono text-[11px] text-[#6b7280] mb-4">
+            <div className="text-[15px] text-muted-foreground mb-4">
               {rule.text} — this can't be undone.
             </div>
             <div className="flex gap-[10px]">
               <button
                 onClick={() => setConfirmDelete(false)}
-                className="flex-1 py-[9px] rounded-md border border-[#222630] bg-transparent text-[#6b7280] font-mono text-[11px] cursor-pointer"
+                className="flex-1 py-[9px] rounded-md border border-border bg-transparent text-muted-foreground text-[15px] cursor-pointer"
               >
                 CANCEL
               </button>
@@ -73,7 +71,7 @@ export default function RuleRow({
                   onDelete(rule);
                   setConfirmDelete(false);
                 }}
-                className="flex-1 py-[9px] rounded-md border-none bg-[#e05252] text-white font-mono text-[11px] font-semibold cursor-pointer"
+                className="flex-1 py-[9px] rounded-md border-none bg-destructive text-destructive-foreground text-[15px] font-semibold cursor-pointer"
               >
                 DELETE
               </button>

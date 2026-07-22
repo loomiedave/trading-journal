@@ -98,18 +98,18 @@ export default function Rules() {
 
   const sectionColor = (section: string) =>
     section === "WHEN TO SKIP"
-      ? { card: "bg-[#1a1414] border-[#3d2222]", text: "text-[#e05252]" }
-      : { card: "bg-[#151820] border-[#222630]", text: "text-[#c9cdd6]" };
+      ? { card: "bg-destructive/10 border-destructive/30", text: "text-destructive" }
+      : { card: "bg-card border-border", text: "text-foreground" };
 
   return (
-    <div className="bg-[#0e1015] min-h-screen font-mono text-[#c9cdd6] w-full">
+    <div className="bg-background min-h-screen text-foreground w-full">
       <div className="px-5 pt-4 pb-10">
         {SECTIONS.map((section) => {
           const items = merged.filter((r) => r.section === section);
           const style = sectionColor(section);
           return (
             <div key={section}>
-              <div className="text-[9px] tracking-[0.2em] text-[#6b7280] mt-5 mb-[10px]">
+              <div className="text-[15px] tracking-[0.2em] text-muted-foreground mt-5 mb-[10px]">
                 {section}
               </div>
               {items.map((rule) => (
@@ -124,7 +124,7 @@ export default function Rules() {
               ))}
               <button
                 onClick={() => openAdd(section)}
-                className="w-full py-[10px] border border-dashed border-[#3a4050] rounded-md text-[#3a4050] text-[10px] tracking-[0.1em] bg-transparent cursor-pointer hover:border-[#4f7cff] hover:text-[#4f7cff] mb-2"
+                className="w-full py-[10px] border border-dashed border-border rounded-md text-muted-foreground text-[14px] tracking-[0.1em] bg-transparent cursor-pointer hover:border-primary hover:text-primary mb-2"
               >
                 + ADD RULE
               </button>

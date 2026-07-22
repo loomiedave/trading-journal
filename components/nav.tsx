@@ -3,6 +3,7 @@ import { useEffect, useRef } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
+import { ThemeToggle } from "@/components/theme-toggle";
 
 const LINKS = [
   { href: "/dashboard", label: "CHECKLIST" },
@@ -73,8 +74,8 @@ export default function Nav() {
   return (
     <>
       {/* ===== Desktop / tablet: original inline nav bar ===== */}
-      <div className="hidden sm:flex px-5 pt-[18px] pb-[10px] border-b border-[#222630] justify-between items-center bg-[#0e1015] sticky top-0 z-50">
-        <span className="text-[#4f7cff] text-[11px] font-semibold tracking-[0.2em] font-mono">
+      <div className="hidden sm:flex px-5 pt-[18px] pb-[10px] border-b border-border justify-between items-center bg-background sticky top-0 z-50">
+        <span className="text-primary text-[15px] font-semibold tracking-[0.2em]">
           PRE-TRADER
         </span>
         <div className="flex gap-4 items-center">
@@ -82,39 +83,42 @@ export default function Nav() {
             <Link
               key={link.href}
               href={link.href}
-              className="text-[10px] tracking-[0.1em] no-underline font-mono"
-              style={{
-                color: pathname === link.href ? "#e8ecf4" : "#6b7280",
-              }}
+              className={`text-[14px] tracking-[0.1em] no-underline ${
+                pathname === link.href ? "text-foreground" : "text-muted-foreground"
+              }`}
             >
               {link.label}
             </Link>
           ))}
           <span
             onClick={signOut}
-            className="text-[#6b7280] text-[10px] tracking-[0.1em] cursor-pointer font-mono"
+            className="text-muted-foreground text-[14px] tracking-[0.1em] cursor-pointer"
           >
             SIGN OUT
           </span>
+          <ThemeToggle />
         </div>
       </div>
 
       {/* ===== Mobile: fixed header (brand + sign out) ===== */}
       <div
-        className="sm:hidden fixed top-0 left-0 right-0 z-50 bg-[#0e1015]/95 backdrop-blur border-b border-[#222630]"
+        className="sm:hidden fixed top-0 left-0 right-0 z-50 bg-background/95 backdrop-blur border-b border-border"
         style={{ paddingTop: "env(safe-area-inset-top, 0px)" }}
       >
         <div className="flex justify-between items-center px-4 h-12">
-          <span className="text-[#4f7cff] text-[11px] font-semibold tracking-[0.2em] font-mono">
+          <span className="text-primary text-[15px] font-semibold tracking-[0.2em]">
             PRE-TRADER
           </span>
-          <button
-            onClick={signOut}
-            aria-label="Sign out"
-            className="text-[#6b7280] text-[9px] tracking-[0.1em] font-mono border border-[#222630] rounded-md px-2 py-1"
-          >
-            SIGN OUT
-          </button>
+          <div className="flex items-center gap-2">
+            <ThemeToggle />
+            <button
+              onClick={signOut}
+              aria-label="Sign out"
+              className="text-muted-foreground text-[15px] tracking-[0.1em] border border-border rounded-md px-2 py-1"
+            >
+              SIGN OUT
+            </button>
+          </div>
         </div>
 
         {/* ===== Swipeable full-width tab bar ===== */}
@@ -126,10 +130,9 @@ export default function Nav() {
               className="no-underline text-center py-3"
             >
               <span
-                className="text-[10px] tracking-[0.1em] font-mono"
-                style={{
-                  color: i === activeIndex ? "#e8ecf4" : "#6b7280",
-                }}
+                className={`text-[14px] tracking-[0.1em] ${
+                  i === activeIndex ? "text-foreground" : "text-muted-foreground"
+                }`}
               >
                 {link.label}
               </span>
@@ -138,7 +141,7 @@ export default function Nav() {
 
           {/* sliding active indicator */}
           <div
-            className="absolute bottom-0 h-[2px] bg-[#4f7cff] transition-transform duration-300 ease-out"
+            className="absolute bottom-0 h-[2px] bg-primary transition-transform duration-300 ease-out"
             style={{
               width: `${100 / LINKS.length}%`,
               transform: `translateX(${activeIndex * 100}%)`,

@@ -18,16 +18,16 @@ function Field({
 }) {
   return (
     <div>
-      <div className="text-[11px] text-[#6b7280] mb-1">{label}</div>
+      <div className="text-[15px] text-muted-foreground mb-1">{label}</div>
       {children}
     </div>
   );
 }
 
 const selectClass =
-  "w-full bg-[#0e1015] border border-[#222630] rounded-md text-[#e8ecf4] px-[10px] py-[9px] text-xs font-mono outline-none";
+  "w-full bg-background border border-border rounded-md text-foreground px-[10px] py-[9px] text-xs outline-none";
 const inputClass =
-  "w-full bg-[#0e1015] border border-[#222630] rounded-md text-[#e8ecf4] px-[10px] py-[9px] text-xs font-mono outline-none box-border";
+  "w-full bg-background border border-border rounded-md text-foreground px-[10px] py-[9px] text-xs outline-none box-border";
 
 export default function TradeModal({
   form,
@@ -82,8 +82,8 @@ export default function TradeModal({
 
   return (
     <div className="fixed inset-0 bg-black/70 flex items-end z-[100]">
-      <div className="bg-[#151820] border-t border-[#222630] rounded-t-2xl w-full px-5 pt-6 pb-10 max-h-[90vh] overflow-y-auto">
-        <div className="font-mono text-[11px] tracking-[0.15em] text-[#6b7280] mb-4">
+      <div className="bg-card border-t border-border rounded-t-2xl w-full px-5 pt-6 pb-10 max-h-[90vh] overflow-y-auto">
+        <div className="text-[15px] tracking-[0.15em] text-muted-foreground mb-4">
           {editingTrade ? "EDIT TRADE" : "LOG TRADE"}
         </div>
 
@@ -223,18 +223,18 @@ export default function TradeModal({
                 <img
                   src={previewUrl}
                   alt="Trade screenshot"
-                  className="w-full rounded-md border border-[#222630] max-h-[200px] object-cover"
+                  className="w-full rounded-md border border-border max-h-[200px] object-cover"
                 />
                 <button
                   type="button"
                   onClick={() => setForm({ ...form, screenshot_url: null })}
-                  className="absolute top-2 right-2 bg-black/70 text-white text-[10px] px-2 py-1 rounded"
+                  className="absolute top-2 right-2 bg-black/70 text-white text-[14px] px-2 py-1 rounded"
                 >
                   ✕ remove
                 </button>
               </div>
             ) : (
-              <label className="w-full flex items-center justify-center bg-[#0e1015] border border-dashed border-[#222630] rounded-md text-[#6b7280] px-[10px] py-[20px] text-xs font-mono cursor-pointer">
+              <label className="w-full flex items-center justify-center bg-background border border-dashed border-border rounded-md text-muted-foreground px-[10px] py-[20px] text-xs cursor-pointer">
                 {uploading ? "Uploading..." : "+ upload screenshot"}
                 <input
                   type="file"
@@ -254,7 +254,7 @@ export default function TradeModal({
               value={form.notes}
               onChange={(e) => setForm({ ...form, notes: e.target.value })}
               placeholder="4H bullish OB, 15M CHoCH confirmed..."
-              className="w-full bg-[#0e1015] border border-[#222630] rounded-md text-[#e8ecf4] px-[10px] py-[9px] text-xs font-mono resize-none h-[70px] box-border outline-none"
+              className="w-full bg-background border border-border rounded-md text-foreground px-[10px] py-[9px] text-xs resize-none h-[70px] box-border outline-none"
             />
           </Field>
         </div>
@@ -262,14 +262,14 @@ export default function TradeModal({
         <div className="flex gap-[10px]">
           <button
             onClick={onClose}
-            className="flex-1 py-[11px] rounded-md border border-[#222630] bg-transparent text-[#6b7280] font-mono text-[11px] cursor-pointer"
+            className="flex-1 py-[11px] rounded-md border border-border bg-transparent text-muted-foreground text-[15px] cursor-pointer"
           >
             CANCEL
           </button>
           <button
             onClick={onSave}
             disabled={saving || uploading}
-            className="flex-[2] py-[11px] rounded-md border-none bg-[#4f7cff] text-white font-mono text-[11px] font-semibold cursor-pointer disabled:opacity-50"
+            className="flex-[2] py-[11px] rounded-md border-none bg-primary text-primary-foreground text-[15px] font-semibold cursor-pointer disabled:opacity-50"
           >
             {saving ? "SAVING..." : "SAVE"}
           </button>
