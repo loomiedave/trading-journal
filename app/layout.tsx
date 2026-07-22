@@ -3,6 +3,7 @@ import "./globals.css";
 import NextTopLoader from "nextjs-toploader";
 import { Geist, Geist_Mono } from 'next/font/google'
 import { ThemeProvider } from "@/components/theme-provider";
+import { ThemeSync } from "@/components/theme-sync";
 
 const geistSans = Geist({
   subsets: ['latin'],
@@ -30,6 +31,11 @@ export const viewport: Viewport = {
     { media: "(prefers-color-scheme: light)", color: "#f7f9fd" },
     { media: "(prefers-color-scheme: dark)", color: "#131722" },
   ],
+
+    width: 'device-width',
+    initialScale: 1,
+    maximumScale: 1,
+    userScalable: false,
 };
 
 export default function RootLayout({
@@ -43,6 +49,7 @@ export default function RootLayout({
           attribute="class"
           defaultTheme="system"
           enableSystem
+          enableColorScheme
           disableTransitionOnChange
         >
           <NextTopLoader
@@ -55,6 +62,7 @@ export default function RootLayout({
             shadow="0 0 10px #4f7cff, 0 0 5px #4f7cff"
             zIndex={9999}
           />
+          <ThemeSync />
           {children}
         </ThemeProvider>
       </body>

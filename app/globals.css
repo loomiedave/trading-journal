@@ -69,6 +69,8 @@
 html {
   scrollbar-width: none;
   -ms-overflow-style: none;
+  touch-action: manipulation;
+  -webkit-text-size-adjust: 100%;
 }
 html::-webkit-scrollbar {
   display: none;
